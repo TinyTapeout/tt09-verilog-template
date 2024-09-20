@@ -1,6 +1,5 @@
 .DS_Store
 .idea
-.vscode
 *.vcd
 runs
 tt_submission
