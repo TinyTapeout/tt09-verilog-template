@@ -11,9 +11,9 @@
 
   "//": "Here are some of the variables you may want to change:",
 
-  "//": "PL_TARGET_DENSITY - You can increase this if Global Placement fails with error GPL-0302.",
-  "//": "Users have reported that values up to 0.8 worked well for them.",
-  "PL_TARGET_DENSITY": 0.6,
+  "//": "PL_TARGET_DENSITY_PCT - You can increase this if Global Placement fails with error GPL-0302.",
+  "//": "Users have reported that values up to 80 worked well for them.",
+  "PL_TARGET_DENSITY_PCT": 60,
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
@@ -21,7 +21,7 @@
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
   "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
-  "GLB_RESIZER_HOLD_SLACK_MARGIN": 0.05,
+  "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.05,
 
   "//": "RUN_LINTER, LINTER_INCLUDE_PDK_MODELS - Disabling the linter is not recommended!",
   "RUN_LINTER": 1,
@@ -42,10 +42,7 @@
   "RUN_KLAYOUT_DRC": 0,
 
   "//": "Don't put clock buffers on the outputs",
-  "PL_RESIZER_BUFFER_OUTPUT_PORTS": 0,
-
-  "//": "Allow use of specific sky130 cells",
-  "SYNTH_READ_BLACKBOX_LIB": 1,
+  "DESIGN_REPAIR_BUFFER_OUTPUT_PORTS": 0,
 
   "//": "Reduce wasted space",
   "TOP_MARGIN_MULT": 1,
@@ -56,7 +53,6 @@
   "//": "Absolute die size",
   "FP_SIZING": "absolute",
 
-  "PL_BASIC_PLACEMENT": 0,
   "GRT_ALLOW_CONGESTION": 1,
 
   "FP_IO_HLENGTH": 2,
@@ -77,7 +73,7 @@
   "RUN_CTS": 1,
 
   "//": "Don't use power rings or met5 layer",
-  "DESIGN_IS_CORE": 0,
+  "FP_PDN_MULTILAYER": 0,
   "RT_MAX_LAYER": "met4",
 
   "//": "MAGIC_DEF_LABELS may cause issues with LVS",
