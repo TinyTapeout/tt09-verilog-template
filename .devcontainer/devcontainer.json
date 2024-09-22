@@ -7,7 +7,6 @@
     "context": ".."
   },
   "runArgs": [
-    "--cpus=4",
     "--memory=10GB"
   ],
   "customizations": {
