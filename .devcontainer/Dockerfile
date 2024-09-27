@@ -2,7 +2,7 @@ ARG VARIANT=ubuntu-22.04
 FROM mcr.microsoft.com/vscode/devcontainers/base:${VARIANT}
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PDK_ROOT=~/ttsetup/pdk
+ENV PDK_ROOT=/home/vscode/ttsetup/pdk
 ENV PDK=sky130A
 
 RUN apt update
