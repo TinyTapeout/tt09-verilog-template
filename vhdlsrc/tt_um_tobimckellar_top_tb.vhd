@@ -102,7 +102,10 @@ begin
         ui_in(5 downto 0) <= "010000";
         wait for 5000 ms;
 
-        ui_in(5 downto 0) <= "100000";
+        ui_in(5 downto 0) <= "111111";
+        wait for 5000 ms;
+
+        ui_in(5 downto 0) <= "000000";
         wait for 5000 ms;
 
         ui_in(6) <= '0';
