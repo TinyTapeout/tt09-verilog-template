@@ -17,7 +17,7 @@ architecture testbench of tb_tt_um_tobimckellar_top is
             uio_in  : in  std_logic_vector(7 downto 0);
             uio_out : in  std_logic_vector(7 downto 0);
             uio_oe  : out std_logic_vector(7 downto 0);
-            en      : in std_logic;
+            ena      : in std_logic;
             clk     : in std_logic;
             rst_n   : in std_logic
         );
@@ -29,13 +29,13 @@ architecture testbench of tb_tt_um_tobimckellar_top is
     signal uio_in  : std_logic_vector(7 downto 0) := (others => '0');
     signal uio_out : std_logic_vector(7 downto 0);
     signal uio_oe  : std_logic_vector(7 downto 0);
-    signal en      : std_logic := '1';
+    signal ena      : std_logic := '1';
     signal clk     : std_logic := '0';
     signal rst_n   : std_logic := '0';
 
     signal simDone : std_logic := '0';
 
-    constant CLK_PERIOD : time := 100 us;  -- 10 kHz clock period
+    constant CLK_PERIOD : time := 100 ns;  -- 10 kHz clock period
 
 begin
 
@@ -47,7 +47,7 @@ begin
             uio_in  => uio_in,
             uio_out => uio_out,
             uio_oe  => uio_oe,
-            en      => en,
+            ena      => ena,
             clk     => clk,
             rst_n   => rst_n
         );

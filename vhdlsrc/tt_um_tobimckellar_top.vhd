@@ -12,7 +12,7 @@ entity tt_um_tobimckellar_top is
         uio_in  : in  std_logic_vector(7 downto 0);
         uio_out : in  std_logic_vector(7 downto 0);
         uio_oe  : out std_logic_vector(7 downto 0);
-        en      : in std_logic;
+        ena     : in std_logic;
         clk     : in std_logic; -- Assuming 10 kHz Clock
         rst_n   : in std_logic
     );
