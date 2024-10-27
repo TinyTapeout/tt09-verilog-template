@@ -33,9 +33,9 @@ end entity tt_um_tobimckellar_top;
 
 architecture behavioural of tt_um_tobimckellar_top is
 
-    constant MAX_COUNT : integer := 64 - 1; -- 1 MHz / 1000
-    constant MAX_AMPLITUDE : integer := MAX_COUNT;
-    constant ROM_ENTRIES : integer := 100;
+    constant MAX_COUNT : integer range 0 to 63 := 64 - 1; -- 1 MHz / 1000
+    constant MAX_AMPLITUDE : integer range 0 to MAX_COUNT := MAX_COUNT;
+    constant ROM_ENTRIES : integer range 0 to 100 := 100;
 
     signal ref_in : std_logic_vector(5 downto 0);
     signal pwm_out : std_logic;
@@ -68,6 +68,9 @@ architecture behavioural of tt_um_tobimckellar_top is
      constant start_index : integer := 0;
      signal sin_value : integer range 0 to max_amplitude := 0;
      signal index : integer range 0 to rom_entries - 1 := 0;
+
+     signal clock_div : integer range 0 to 10 * 63:= 630;
+     signal clock_ticks : integer range 0 to 10 * 63:= 630;
 
 begin
 
@@ -120,18 +123,17 @@ begin
 
 
     sin_ref : process (clk) is
-        variable clock_div : integer := 10;
-        variable clock_ticks : integer := 0;
     begin
         if rising_edge(clk) then
             if rst_n = '0' then
                 index <= start_index;
+                clock_ticks <= 0;
             else
-                clock_div := 10*to_integer(unsigned(ref_in));
-                if clock_ticks > clock_div then
-                    clock_ticks := 0;
+                clock_div <= 10*to_integer(unsigned(ref_in));
+                if clock_ticks >= clock_div then
+                    clock_ticks <= 0;
                 else
-                    clock_ticks := clock_ticks + 1;
+                    clock_ticks <= clock_ticks + 1;
                 end if;
                 if clock_ticks = 0 then
                     if index = rom_entries - 1 then
