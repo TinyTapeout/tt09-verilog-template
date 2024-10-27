@@ -9,3 +9,6 @@ test/sim_build
 test/__pycache__/
 test/results.xml
 test/gate_level_netlist.v
+
+bld/
+*.ghw
