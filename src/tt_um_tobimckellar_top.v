@@ -219,7 +219,7 @@ module tt_um_tobimckellar_top (
   /* vhdlsrc/tt_um_tobimckellar_top.vhd:127:9  */
   assign n100_o = {pwm_out, 7'b0000000};
   /* vhdlsrc/tt_um_tobimckellar_top.vhd:14:9  */
-  wire [5:0] n101[99:0] ; // memory
+  (* keep *) wire [5:0] n101[99:0] ; // memory
   assign n101[99] = 6'b000000;
   assign n101[98] = 6'b000000;
   assign n101[97] = 6'b000000;
