@@ -60,10 +60,6 @@
 
   "FP_PDN_VPITCH": 38.87,
 
-  "//": "Use specific decap and fill cells to solve LI/POLY density issues",
-  "DECAP_CELL": ["sky130_fd_sc_hd__decap_3"],
-  "FILL_CELL": ["sky130_fd_sc_hd__fill_2", "sky130_fd_sc_hd__fill_1"],
-
   "//": "Clock",
   "RUN_CTS": 1,
 
