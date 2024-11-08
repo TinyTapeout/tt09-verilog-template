@@ -43,34 +43,13 @@ architecture behavioural of tt_um_tobimckellar_top is
     signal enable_pwm : std_logic;
     signal breathe_state : std_logic;
 
-    type rom_type is array(0 to ROM_ENTRIES - 1) of integer range 0 to MAX_AMPLITUDE;
 
-    function init_rom return rom_type is
-        variable rom_v : rom_type;
-        variable angle : real;
-        variable sin_scaled : real;
+    signal triangle_value : integer range 0 to max_amplitude;
+    signal count_up : std_logic;
 
-      begin
-
-        for i in 0 to rom_entries - 1 loop
-
-          angle := real(i) * ((2.0 * MATH_PI) / real(ROM_ENTRIES));
-          sin_scaled := ((1.0 + sin(angle - MATH_PI_OVER_2)) * real(MAX_AMPLITUDE) / 2.0);
-          rom_v(i) := integer(round(real(sin_scaled)));
-
-        end loop;
-
-        return rom_v;
-      end init_rom;
-
-     constant rom : rom_type := init_rom;
-
-     constant start_index : integer := 0;
-     signal sin_value : integer range 0 to max_amplitude;
-     signal index : integer range 0 to rom_entries - 1;
-
-     signal clock_div : integer range 0 to 10 * 63;
-     signal clock_ticks : integer range 0 to 10 * 63;
+    signal clock_divisor : integer range 0 to 10 * 63;
+    signal clock_divisor_ticks : integer range 0 to 10 * 63;
+    signal divided_clock : std_logic;
 
 begin
 
@@ -105,14 +84,20 @@ begin
                 pwm_out <= '0';
             else
                 if breathe_state = '0' then
-                    if (to_integer(unsigned(ref_in)) >= counter) then
+                    if (to_integer(unsigned(ref_in)) > counter) then
                         pwm_out <= '1' and enable_pwm;
                     else
                         pwm_out <= '0';
                     end if;
-                else
-                    if (sin_value >= counter) then
+                    if ref_in = "111111" then
                         pwm_out <= '1' and enable_pwm;
+                    end if;
+                    if ref_in = "000000" then
+                        pwm_out <= '0' and enable_pwm;
+                    end if;
+                else
+                    if (triangle_value > counter) then
+                            pwm_out <= '1' and enable_pwm;
                     else
                         pwm_out <= '0';
                     end if;
@@ -121,31 +106,55 @@ begin
         end if;
     end process;
 
-
-    sin_ref : process (clk) is
+    clock_div_proc : process(clk) is
     begin
         if rising_edge(clk) then
             if rst_n = '0' then
-                index <= start_index;
-                clock_ticks <= 0;
-                clock_div <= 0;
+                clock_divisor <= 0;
+                clock_divisor_ticks <= 0;
+                divided_clock <= '0';
+                count_up <= '1';
+                triangle_value <= 0;
             else
-                clock_div <= 10*to_integer(unsigned(ref_in));
-                if clock_ticks >= clock_div then
-                    clock_ticks <= 0;
+                clock_divisor <= 10*to_integer(unsigned(ref_in));
+                if clock_divisor_ticks < clock_divisor then
+                    clock_divisor_ticks <= clock_divisor_ticks + 1;
                 else
-                    clock_ticks <= clock_ticks + 1;
-                end if;
-                if clock_ticks = 0 then
-                    if index = rom_entries - 1 then
-                        index <= 0;
+                    clock_divisor_ticks <= 0;
+                    divided_clock <= not divided_clock;
+                    if ((triangle_value = MAX_COUNT-1 and count_up = '1') or (triangle_value = 1 and count_up = '0')) then
+                        count_up <= not count_up;
+                    end if;
+                    if count_up = '1' then
+                        triangle_value <= triangle_value + 1;
                     else
-                        index <= index + 1;
+                        triangle_value <= triangle_value - 1;
+
                     end if;
                 end if;
-                sin_value <= rom(index);
             end if;
         end if;
     end process;
+
+    -- triangle_gen : process (clk, divided_clock) is
+    -- begin
+    --     if rising_edge(clk) then
+    --         if rst_n = '0' then
+    --             count_up <= '1';
+    --         end if;
+    --     end if;
+    --     if rising_edge(divided_clock) then
+
+    --         if ((triangle_value = MAX_COUNT-1 and count_up = '1') or (triangle_value = 1 and count_up = '0')) then
+    --             count_up <= not count_up;
+    --         end if;
+    --         if count_up = '1' then
+    --             triangle_value <= triangle_value + 1;
+    --         else
+    --             triangle_value <= triangle_value - 1;
+
+    --         end if;
+    --     end if;
+    -- end process;
 
 end architecture behavioural;
